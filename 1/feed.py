@@ -53,16 +53,17 @@ def run_training():
         init = tf.global_variables_initializer()
         sess = tf.Session()
         sess.run(init)
+        
+        start_time = time.time()
 
         for step in range(FLAGS.max_steps):
-            start_time = time.time()
 
             feed_dict = fill_feed_dict(data_sets.train, images_placeholder, labels_placeholder)
             _, loss_value = sess.run([train_op, loss], feed_dict=feed_dict)
-
-            duration = time.time() - start_time
             if step % 100 == 0:
+                duration = time.time() - start_time
                 print('Step %d: loss = %.2f (%.3f sec)' % (step, loss_value, duration))
+                start_time = time.time()
 
             if (step + 1) % 1000 == 0 or (step + 1) == FLAGS.max_steps:
                 print('Training Data Eval:')
