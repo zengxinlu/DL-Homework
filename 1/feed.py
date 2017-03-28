@@ -32,8 +32,7 @@ def do_eval(sess, eval_correct, images_placeholder, labels_placeholder, data_set
         feed_dict = fill_feed_dict(data_set, images_placeholder, labels_placeholder)
         true_count += sess.run(eval_correct, feed_dict=feed_dict)
     precision = float(true_count) / num_examples
-    print('  Num examples: %d  Num correct: %d  Precision @ 1: %0.04f' %
-            (num_examples, true_count, precision))
+    print('  Num examples: %d  Num correct: %d  Precision @ 1: %0.04f' % (num_examples, true_count, precision))
 
 
 def run_training():
@@ -73,6 +72,7 @@ def run_training():
                 print('Test Data Eval:')
                 do_eval(sess, eval_correct, images_placeholder, labels_placeholder, data_sets.test)
 
+    print(FLAGS)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -85,13 +85,13 @@ if __name__ == '__main__':
     parser.add_argument(
         '--max_steps',
         type=int,
-        default=2000,
+        default=5000,
         help='Number of steps to run trainer.'
     )
     parser.add_argument(
         '--hidden1',
         type=int,
-        default=128,
+        default=300,
         help='Number of units in hidden layer 1.'
     )
     parser.add_argument(
