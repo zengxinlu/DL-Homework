@@ -97,7 +97,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--hidden2',
         type=int,
-        default=32,
+        default=150,
         help='Number of units in hidden layer 2.'
     )
     parser.add_argument(
