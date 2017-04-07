@@ -41,7 +41,7 @@ def run_training():
         # 初始化输入占位符
         images_placeholder, labels_placeholder = placeholder_inputs(FLAGS.batch_size)
         # 构建神经网络
-        logits = mnist.inference(images_placeholder, FLAGS.hidden1, FLAGS.hidden2)
+        logits, keep_prob = mnist.inference(images_placeholder, FLAGS.hidden1, FLAGS.hidden2)
         # 添加损失函数
         loss = mnist.loss(logits, labels_placeholder)
         # 训练
