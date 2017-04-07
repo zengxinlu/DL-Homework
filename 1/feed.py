@@ -41,7 +41,7 @@ def run_training():
         # 初始化输入占位符
         images_placeholder, labels_placeholder = placeholder_inputs(FLAGS.batch_size)
         # 构建神经网络
-        logits = mnist.inference(images_placeholder,FLAGS.hidden1,FLAGS.hidden2)
+        logits = mnist.inference(images_placeholder, FLAGS.hidden1, FLAGS.hidden2)
         # 添加损失函数
         loss = mnist.loss(logits, labels_placeholder)
         # 训练
@@ -50,9 +50,10 @@ def run_training():
         eval_correct = mnist.evaluation(logits, labels_placeholder)
 
         init = tf.global_variables_initializer()
+        # sess = tf.InteractiveSession()
         sess = tf.Session()
         sess.run(init)
-        
+                        
         start_time = time.time()
 
         for step in range(FLAGS.max_steps):

@@ -6,28 +6,33 @@ NUM_CLASSES = 10
 IMAGE_SIZE = 28
 IMAGE_PIXELS = IMAGE_SIZE * IMAGE_SIZE
 
+def weight_variable(shape, stddev):
+  initial = tf.truncated_normal(shape, stddev = stddev)
+  return tf.Variable(initial, name = 'weights')
+
+def bias_variable(shape, constant):
+  initial = tf.constant(constant, shape = shape)
+  return tf.Variable(initial, name = 'biases')
+
 def inference(images, hidden1_units, hidden2_units):
+  # conv 1
+  # with tf.name_scope('conv1'):
+  #   weights = weight_variable([])
   # Hidden 1
   with tf.name_scope('hidden1'):
-    weights = tf.Variable(
-        tf.truncated_normal([IMAGE_PIXELS, hidden1_units],
-                            stddev=1.0 / math.sqrt(float(IMAGE_PIXELS))), name='weights')
-    biases = tf.Variable(tf.zeros([hidden1_units]), name='biases')
+    weights = weight_variable([IMAGE_PIXELS, hidden1_units], 1.0 / math.sqrt(float(IMAGE_PIXELS)))
+    biases = bias_variable([hidden1_units], 0.1)
     hidden1 = tf.nn.relu(tf.matmul(images, weights) + biases)
   # Hidden 2
-  # with tf.name_scope('hidden2'):
-  #   weights = tf.Variable(
-  #       tf.truncated_normal([hidden1_units, hidden2_units],
-  #                           stddev=1.0 / math.sqrt(float(hidden1_units))), name='weights')
-  #   biases = tf.Variable(tf.zeros([hidden2_units]), name='biases')
-  #   hidden2 = tf.nn.relu(tf.matmul(hidden1, weights) + biases)
+  with tf.name_scope('hidden2'):
+    weights = weight_variable([hidden1_units, hidden2_units], 1.0 / math.sqrt(float(hidden1_units)))
+    biases = bias_variable([hidden2_units], 0.1)
+    hidden2 = tf.nn.relu(tf.matmul(hidden1, weights) + biases)
   # Linear
   with tf.name_scope('softmax_linear'):
-    weights = tf.Variable(
-        tf.truncated_normal([hidden1_units, NUM_CLASSES],
-                            stddev=1.0 / math.sqrt(float(hidden1_units))), name='weights')
-    biases = tf.Variable(tf.zeros([NUM_CLASSES]), name='biases')
-    logits = tf.matmul(hidden1, weights) + biases
+    weights = weight_variable([hidden2_units, NUM_CLASSES], 1.0 / math.sqrt(float(hidden2_units)))
+    biases = bias_variable([NUM_CLASSES], 0.1)
+    logits = tf.matmul(hidden2, weights) + biases
   return logits
 
 
@@ -42,7 +47,6 @@ def training(loss, learning_rate):
   global_step = tf.Variable(0, name='global_step', trainable=False)
   train_op = optimizer.minimize(loss, global_step=global_step)
   return train_op
-
 
 def evaluation(logits, labels):
   correct = tf.nn.in_top_k(logits, labels, 1)
