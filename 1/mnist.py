@@ -54,6 +54,7 @@ def inference(images, hidden1_units, hidden2_units):
 
   # Linear
   keep_prob = tf.placeholder(tf.float32)
+  # keep_prob = 0.5
   # hidden1Drop = tf.nn.dropout(hidden1, keep_prob)
   hidden1Drop = hidden1
   with tf.name_scope('softmax_linear'):
